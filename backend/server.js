@@ -6,11 +6,14 @@ const { config } = require('./config/config')
 
 const port = config.PORT || 4000
 
+app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
 app.get('/', (req, res) => {
     res.send('init')
 })
+
+app.use('/api/places', require('./routes/places'))
 
 mongoose.connect(config.MONGO_URI)
     .then(() => {
