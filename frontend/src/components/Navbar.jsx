@@ -14,17 +14,17 @@ function CompNavbar() {
           <Navbar.Collapse id="navbarNav">
             <Nav className="me-auto mb-2 mb-lg-0">
               <Nav.Item>
-                <Nav.Link class="nav-link" href="/">
+                <Nav.Link className="nav-link" href="/">
                   Home
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link class="nav-link" href="/places">
+                <Nav.Link className="nav-link" href="/places">
                   Places
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link class="nav-link" href="/places/create">
+                <Nav.Link className="nav-link" href="/places/create">
                   New Place
                 </Nav.Link>
               </Nav.Item>
