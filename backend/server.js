@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
     res.send('init')
 })
 
-app.use('/api/places', require('./routes/places'))
+app.use('/api/v1/places', require('./routes/places'))
 
 mongoose.connect(config.MONGO_URI)
     .then(() => {
