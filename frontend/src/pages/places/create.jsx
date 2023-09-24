@@ -1,21 +1,54 @@
 import { useState } from 'react'
-import { redirect } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 function Create() {
   const [validated, setValidated] = useState(false)
+  const [title, setTitle] = useState('')
+  const [location, setLocation] = useState('')
+  const [description, setDescription] = useState('')
+  const [price, setPrice] = useState('')
+  const [image, setImage] = useState('')
+  const [error, setError] = useState(null)
 
-  const handleSubmit = (event) => {
+  const navigate = useNavigate()
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+
     const form = event.currentTarget
     if (!form.checkValidity()) {
-      event.preventDefault()
       event.stopPropagation()
     }
 
     setValidated(true)
 
-    redirect('/places')
+    const place = { title, location, description, price, image }
+
+    const response = await fetch('http://localhost:3000/api/v1/places', {
+      method: 'POST',
+      body: JSON.stringify(place),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    const data = await response.json()
+
+    if (!response.ok) {
+      setError(data.error)
+    }
+
+    if (response.ok) {
+      setError(null)
+      setTitle('')
+      setLocation('')
+      setDescription('')
+      setPrice('')
+      setImage('')
+      console.log('Place created successfully!', data)
+      navigate('/places')
+    }
   }
 
   return (
@@ -29,14 +62,11 @@ function Create() {
           enctype="multipart/form-data"
         >
           <Form.Group class="mb-3">
-            <label for="title" class="form-label">
-              Title
-            </label>
+            <Form.Label>Title</Form.Label>
             <Form.Control
               type="text"
-              name="place[title]"
               id="title"
-              class="form-control"
+              onChange={(e) => setTitle(e.target.value)}
               required
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -46,14 +76,11 @@ function Create() {
           </Form.Group>
 
           <Form.Group class="mb-3">
-            <label for="location" class="form-label">
-              Location
-            </label>
-            <input
+            <Form.Label>Location</Form.Label>
+            <Form.Control
               type="text"
-              name="place[location]"
               id="location"
-              class="form-control"
+              onChange={(e) => setLocation(e.target.value)}
               required
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -63,15 +90,13 @@ function Create() {
           </Form.Group>
 
           <Form.Group class="mb-3">
-            <label for="description" class="form-label">
-              Description
-            </label>
-            <textarea
-              name="place[description]"
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              as="textarea"
               id="description"
-              class="form-control"
+              onChange={(e) => setDescription(e.target.value)}
               required
-            ></textarea>
+            ></Form.Control>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             <Form.Control.Feedback type="invalid">
               Please fill out this field.
@@ -79,14 +104,11 @@ function Create() {
           </Form.Group>
 
           <Form.Group class="mb-3">
-            <label for="price" class="form-label">
-              Price
-            </label>
-            <input
+            <Form.Label>Price</Form.Label>
+            <Form.Control
               type="text"
-              name="place[price]"
               id="price"
-              class="form-control"
+              onChange={(e) => setPrice(e.target.value)}
               required
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -96,16 +118,14 @@ function Create() {
           </Form.Group>
 
           <Form.Group class="mb-3">
-            <label for="image" class="form-label">
-              Image
-            </label>
-            <input
-              type="file"
-              name="image"
+            <Form.Label>Image</Form.Label>
+            <Form.Control
+              type="text"
+              // name="image"
               id="image"
-              accept="image/*"
-              class="form-control"
-              multiple
+              // accept="image/*"
+              // multiple
+              onChange={(e) => setImage(e.target.value)}
               required
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -117,6 +137,7 @@ function Create() {
           <Button type="submit" variant="success">
             Save
           </Button>
+          {error && <p className="text-danger">{error}</p>}
         </Form>
       </div>
     </>
