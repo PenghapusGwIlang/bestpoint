@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Row, Col } from 'react-bootstrap'
+import CardToBottom from '../../components/CardToBottom'
+import ReviewForm from '../../components/ReviewForm'
+import ReviewCard from '../../components/ReviewCard'
 
 const Show = () => {
   const [place, setPlace] = useState(null)
@@ -21,13 +25,18 @@ const Show = () => {
 
   return (
     <>
-      <div className="container mt-5">
-        <p>{place?.title}</p>
-        <p>{place?.price}</p>
-        <p>{place?.description}</p>
-        <p>{place?.location}</p>
-        <p>{place?.createdAt}</p>
-      </div>
+      <main className="container mt-5">
+        <Row className="mb-5">
+          <Col className="col-6">{place && <CardToBottom place={place} />}</Col>
+          <Col className="col-6">
+            <ReviewForm />
+            {place &&
+              place.reviews.map((review) => (
+                <ReviewCard key={review._id} review={review} />
+              ))}
+          </Col>
+        </Row>
+      </main>
     </>
   )
 }
