@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import CardToRight from '../../components/CardToRight'
 
 function Index() {
   const [places, setPlaces] = useState(null)
@@ -23,9 +24,7 @@ function Index() {
         <div className="places">
           {places &&
             places.map((place) => (
-              <p key={place._id}>
-                <a href={`places/${place._id}`}>{place.title}</a>
-              </p>
+              <CardToRight key={place._id} place={place} />
             ))}
         </div>
       </main>
