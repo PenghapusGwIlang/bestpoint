@@ -22,7 +22,7 @@ module.exports.show = async (req, res) => {
         return res.status(404).json({ error: 'Place not found' })
     }
 
-    const place = await Place.findById(id)
+    const place = await Place.findById(id).populate('reviews')
 
     if (!place) {
         res.status(404).json({ error: 'Place not found' })
